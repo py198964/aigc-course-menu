@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIGC视频创作｜课程菜单</title>
+<style>
+:root{--ink:#172b3a;--muted:#586b78;--green:#086b61;--line:#d7e1df;--bg:#f4f6f3;--blue:#eaf1f7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 "Microsoft YaHei","PingFang SC",sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #db981f;outline-offset:3px}a{color:var(--green)}header{background:#173b3a;color:#fff;padding:46px max(5%,calc((100% - 1240px)/2)) 34px}.eyebrow{font-size:13px;letter-spacing:3px;color:#b8d8cf}h1{font-size:38px;line-height:1.25;margin:15px 0}header p{color:#d7e6e1;max-width:850px}h2{font-size:25px;line-height:1.4}h3{line-height:1.5;margin:8px 0}small,.muted{color:var(--muted)}.facts{display:flex;gap:32px;flex-wrap:wrap;margin-top:25px}.facts strong{font-size:29px;margin-right:8px;color:#cbe7b7}.wrap{max-width:1240px;margin:auto;padding:24px 24px 70px}.nav{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:25px}.nav button{border:0;padding:10px 19px;background:transparent;border-radius:7px;color:var(--ink)}.nav button[aria-selected=true]{background:var(--green);color:white}.bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}.bar label{display:flex;gap:8px;align-items:center}.bar input,.bar select{padding:9px;border:1px solid #a7bcb5;border-radius:5px;background:white;max-width:100%}.bar input{width:290px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:25px;align-items:start}.catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.course{background:white;border:1px solid var(--line);border-radius:10px;padding:19px}.meta{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);flex-wrap:wrap}.code{font-weight:700;letter-spacing:1px;color:var(--green)}.course h3{font-size:17px}.course p{margin:10px 0}.course label{display:flex;align-items:center;gap:8px;margin-top:15px;font-size:13px}.course input{width:18px;height:18px;accent-color:var(--green)}summary{cursor:pointer;color:var(--green);font-size:13px}details ol{padding-left:21px}details p{font-size:13px}aside{background:#e7efea;padding:22px;border-radius:10px;position:sticky;top:15px}aside h3{font-size:19px}aside ul{padding-left:18px;font-size:13px}.btn{border:1px solid #91aaa0;background:white;padding:8px 12px;border-radius:5px;color:var(--ink)}.btn.primary{background:var(--green);border-color:var(--green);color:white}.actions{display:flex;flex-wrap:wrap;gap:8px}.hours{font-size:34px;color:var(--green);font-weight:700}.notice{font-size:13px;color:#765116;background:#fff9df;padding:12px;margin:12px 0;border-radius:5px}.sectionnote{max-width:940px}.preset{background:white;border:1px solid var(--line);border-radius:9px;padding:24px;margin:18px 0}.day{display:grid;grid-template-columns:66px 1fr;gap:12px;margin:13px 0}.day strong{color:var(--green)}.day span{display:inline-block;margin:3px 4px 3px 0;padding:5px 10px;background:#f0f4f2;border-radius:4px;font-size:13px}.branches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:18px 0}.branch{padding:22px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--green);border-radius:8px}.branch ol{padding-left:20px}.flowcore{text-align:center;background:#dfece5;padding:20px;border-radius:8px;margin:20px 0;font-weight:600}.arrow{text-align:center;color:var(--green);font-size:23px}.pathlinks{display:flex;gap:9px;flex-wrap:wrap}.pathlinks button{background:var(--blue);border:0;padding:8px 12px;border-radius:5px;color:var(--ink)}.topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.topic{padding:18px;background:white;border:1px solid var(--line);border-radius:8px}.topic ul{padding-left:22px}.sources li{margin-bottom:14px}.statline{display:flex;gap:30px;flex-wrap:wrap}.empty{padding:30px;background:white}.foot{margin-top:30px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}.readme{font-size:14px}.readme h3{margin-top:28px}.hidden,[hidden]{display:none!important}#print-table{display:none}.hint{font-size:12px}.titleline{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+@media(max-width:950px){.layout{grid-template-columns:1fr}aside{position:static}.branches{grid-template-columns:1fr}.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){header{padding:28px 20px}h1{font-size:29px}.wrap{padding:20px 16px}.catalog,.topics{grid-template-columns:1fr}.bar{display:block}.bar label{margin:10px 0;flex-wrap:wrap}.bar input{width:100%}.facts{gap:18px}.day{grid-template-columns:1fr}.course{padding:17px}}
+@media print{header{background:white;color:black;padding:0}header p,.eyebrow{color:#333}.facts,.nav,.bar,aside,.actions,.pathlinks,.foot{display:none!important}.wrap{padding:0;max-width:none}section[role=tabpanel]{display:none!important}#print-table{display:block!important}table{width:100%;border-collapse:collapse;font-size:9pt}td,th{padding:7px;border:1px solid #ccc;text-align:left}tr{break-inside:avoid}h1{font-size:23pt}.printnote{font-size:10pt}thead{display:table-header-group}}
+</style></head><body>
+<header><div class="eyebrow">OPEN LEARNING · AIGC VIDEO CREATION</div><h1>从一门微课，到一项视频服务</h1><p>开放大学与社会培训共用的原子课程菜单。按成果选课，用三款工具串起制作流程，再组合成适合学员的学习路径。</p><div class="facts"><div><strong>36</strong>门原子课</div><div><strong>1–2</strong>小时／门</div><div><strong>54</strong>小时完整课库</div><div><strong>3</strong>条工具路径</div></div></header>
+<main class="wrap"><nav class="nav" role="tablist" aria-label="课程内容"><button role="tab" id="tab-menu" aria-controls="menu" aria-selected="true">课程菜单</button><button role="tab" id="tab-paths" aria-controls="paths" aria-selected="false">课程关系图</button><button role="tab" id="tab-plans" aria-controls="plans" aria-selected="false">按天数组课</button><button role="tab" id="tab-guide" aria-controls="guide" aria-selected="false">教学说明与依据</button></nav>
+<section id="menu" role="tabpanel" aria-labelledby="tab-menu"><div class="titleline"><h2>按需选择，逐步积累作品</h2><span id="count" class="muted" aria-live="polite"></span></div><div class="bar"><label>搜索 <input id="search" type="search" placeholder="输入广告、出海、教师、工具等" aria-label="搜索课程"></label><label>类别 <select id="category"><option value="">全部类别</option><option>通用基础</option><option>工具入门</option><option>案例实战</option><option>职业交付</option></select></label><label>层级 <select id="level"><option value="">全部层级</option><option>入门</option><option>进阶</option><option>职业应用</option></select></label></div><div class="layout"><div class="catalog" id="catalog"></div><aside><h3>我的课程组合</h3><div aria-live="polite"><span class="hours" id="hours">0</span> 小时 · <span id="chosen-count">0</span> 门<div id="days" class="muted">按每天6小时折算</div></div><ul id="chosen"></ul><div id="requirements"></div><div class="actions"><button class="btn primary" id="export">导出选课单</button><button class="btn" id="clear">清空</button><button class="btn" id="print">打印清单</button></div><p class="hint">勾选用于估算组合。课序需按工具前置安排；基础知识可按已有能力补齐。时长为净教学时间。</p></aside></div></section>
+<section id="paths" role="tabpanel" aria-labelledby="tab-paths" hidden><h2>先选成果，再选工具路径</h2><p class="sectionnote">四类课程用于管理，不是四个必须依次读完的学期。基础知识随项目穿插；每条路径学习一种工具，再完成相应案例。点击课程编号可返回该课。</p><div class="flowcore">学员起点与客户需求 → 按需补齐 F01—F12<br><small>需求 · 选题 · 脚本 · 分镜 · 资产 · 关键帧 · 生成 · 声音 · 剪辑 · 审核</small></div><div class="arrow">↓</div><div class="branches"><div class="branch"><small>路径 01</small><h3>画布 · 创意与内容制作</h3><p>T01 → 广告、产品、商家、口播、微课、知识与创意；可进阶文旅、特效和音乐视觉。</p><div class="pathlinks" data-ids="T01 P01 P02 P03 P04 P05 P06 P07 P08 P13 P14 P15"></div></div><div class="branch"><small>路径 02</small><h3>转绘 · 改编与本地化</h3><p>T02 → P09风格转绘 → P10目标市场本地化。使用自摄或授权素材，加入原创表达。</p><div class="pathlinks" data-ids="T02 P09 P10"></div></div><div class="branch"><small>路径 03</small><h3>导演台 · 短剧与漫剧</h3><p>T03 → P11短剧场景／P12漫剧片段。文旅叙事也可选择这条路径完成P13。</p><div class="pathlinks" data-ids="T03 P11 P12 P13"></div></div></div><div class="arrow">↓</div><div class="flowcore">B01—B06 · 报价 → 修改交付 → 作品集 → 数据复盘 → 系列生产 → 展示诊断</div><div class="arrow">↓</div><div class="flowcore">可验证的学习成果 ／ 作品集 ／ 模拟客户服务</div><h3>基础能力内部的生产顺序</h3><div class="topics"><div class="topic"><strong>策划链</strong><p>F02需求 → F03选题 → F04脚本 → F05分镜</p></div><div class="topic"><strong>视觉链</strong><p>F07资产 → F08关键帧 → F09镜头诊断</p></div><div class="topic"><strong>成片链</strong><p>F10声音＋F11剪辑 → F12审核</p></div><div class="topic"><strong>跨环节能力</strong><p>F01生产流程；F06提示词控制。项目课内即时补充必要知识。</p></div></div><p class="muted">工具节点表示操作前置；同类项目课可以独立选修。F12检查要点应嵌入每次公开发布前的练习。</p></section>
+<section id="plans" role="tabpanel" aria-labelledby="tab-plans" hidden><h2>1天体验，2—3天专题，一周综合</h2><p>每个教学日6小时；1小时=60分钟。课间、午休、安装准备与课后加练另计。“一周”默认5个教学日，另提供7日强化版。</p><div id="presets"></div></section>
+<section id="guide" role="tabpanel" aria-labelledby="tab-guide" hidden><h2>以课堂可完成的任务定义课程</h2><div class="readme"><h3>优先开发方向</h3><p>先开发电商产品、商家宣传、数字人口播和教育微课，便于明确客户与交付物；TVC、转绘本地化、短剧作为进阶；漫剧、文旅、实拍特效和音乐视觉作为特色选修。这是课程产品判断，不是收入或市场排名。</p><p>首轮试运行12门：F01、F03、F04、F12、T01、T02、T03、P02、P05、P06、P09、P11，共20小时。用小班试讲验证完成率、耗时与常见失败点，再扩展全课库。</p><h3>每门课都有方法、练习和交付</h3><div class="topics"><div class="topic"><strong>60分钟能力课</strong><p>10分钟案例 → 15分钟方法 → 25分钟练习 → 10分钟讲评。</p></div><div class="topic"><strong>120分钟项目课</strong><p>15分钟背景 → 20分钟示范 → 60分钟跟练 → 15分钟检查 → 10分钟展示。</p></div></div><p>项目课默认提供脚本模板、已授权素材、预生成候选和项目工程；学员至少完成一次关键生成与一次有理由的修改。课堂目标是限定长度的可播放样片。商业精修、复杂人物调度和独立原创还需要额外练习。</p><h3>三工具能力尚需用最新教程校准</h3><p>画布、转绘、导演台的定位依据本次需求描述。数字人、多语种配音、声音、字幕、精细剪辑及合成按配套能力安排，不预设三款工具均已内置。开课前需验证版本、权限、生成额度、时长限制及导出流程。</p><h3>开放大学内部课程</h3><p>教师培训可选1天微课制作班。学生选修课建议36小时：F01—F12（12h）＋T01—T03（6h）＋P01、P02、P05、P06、P09、P10、P11、P12（16h）＋B02、B06（2h）。相当于48个45分钟学时；学分认定由校方决定。</p><p>录播资源按每个模块拆成若干5—15分钟知识视频、操作视频与练习。两小时指学习模块时长，不是一段连续录播视频。</p><h3>社会培训与作品评价</h3><p>按“目标客户＋视频服务＋作品集”组织学习。项目量规建议：任务匹配20分、表达20分、视听25分、过程与可修改性20分、来源与发布检查15分；70分为建议课堂达标线。关键事实错误或授权材料缺失时先修订。课程不承诺爆款、接单或收益。</p><p>生成与订阅费用另列；安装、账号和素材准备在课前完成。学校与培训机构使用讲师演示工程、学员素材包、最低任务和加练任务，并记录本人制作与模板的贡献。</p><h3>原课程的复用方式</h3><p>复用银行课的需求—选题—脚本—分镜—资产—生成—剪辑—审核主线及中间成果模板，替换为教育、商家、产品、文化和原创短剧场景。旧版工具介绍不作为现版本功能证据。</p><h3>趋势依据与发布规则</h3><p class="muted">2026年9月21日检索。平台数据只是需求信号；转绘不自动取得素材授权，有授权也不必然符合平台获利要求。</p><ol class="sources" id="sources"></ol><h3>配套文件</h3><p><a href="课程菜单与组课方案.md">完整文字方案</a> · <a href="课程清单.csv">表格清单 CSV</a> · <a href="课程思维导图.mm">FreeMind 思维导图</a> · <a href="课程逻辑图.mmd">Mermaid 逻辑图源文件</a></p></div></section>
+<div id="print-table"></div><div class="foot">课程产品建议稿 v1.0 · 2026.09.21 · 当前交付为菜单与组课方案，尚不代表36套课件已制作完成。所有样片任务需经工具试讲校准。</div></main>
+<script id="data" type="application/json">{
+  "courses": [
+    {
+      "id": "F01",
+      "title": "AIGC视频入门：一条片子的生产地图",
+      "hours": 1,
+      "tools": "通用／三工具概览",
+      "intro": "建立从需求到交付的全流程认知，知道每一步应该产出什么。",
+      "outline": [
+        "拆解30秒样片",
+        "区分文案、图像、视频与剪辑",
+        "比较三工具路径",
+        "制定首个练习任务"
+      ],
+      "output": "一张个人视频生产流程图",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "所有学员",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F02",
+      "title": "把需求讲清楚：从客户想法到创作任务书",
+      "hours": 1,
+      "tools": "通用",
+      "intro": "把“做得高级一点”等模糊要求转成可执行的创作约束。",
+      "outline": [
+        "确认受众与用途",
+        "锁定单一核心信息",
+        "约定时长、比例与风格",
+        "形成验收条件"
+      ],
+      "output": "一页创作任务书与验收要点",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "机构宣传／商家服务",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F03",
+      "title": "选题与开头：让观众愿意继续看",
+      "hours": 1,
+      "tools": "通用",
+      "intro": "围绕用户问题、情绪和利益点，设计可测试的选题与前三秒开头。",
+      "outline": [
+        "识别受众问题",
+        "拆解信息缺口与冲突",
+        "生成三种开头",
+        "排除夸大和标题误导"
+      ],
+      "output": "3个选题、3版开头与选择理由",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "短视频运营／自由创作者",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F04",
+      "title": "脚本小课：把一个卖点写成30秒故事",
+      "hours": 1,
+      "tools": "通用",
+      "intro": "掌握可拍、可生成、可剪辑的短视频脚本写法。",
+      "outline": [
+        "确定一句话主张",
+        "搭建起承转合",
+        "写画面、旁白与时长",
+        "删减无法实现的情节"
+      ],
+      "output": "一份30秒脚本及压缩版",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "广告／科普／剧情",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F05",
+      "title": "分镜小课：把文字变成镜头清单",
+      "hours": 1,
+      "tools": "通用／画布",
+      "intro": "把脚本拆成可独立生成的短镜头，控制景别和连续性。",
+      "outline": [
+        "拆分4—6个镜头",
+        "安排景别与运动",
+        "检查动作和视线",
+        "估算镜头时间"
+      ],
+      "output": "一份4—6镜分镜表",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "广告／短剧",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F06",
+      "title": "提示词小课：从碰运气到可控修改",
+      "hours": 1,
+      "tools": "画布＋配套生成能力",
+      "intro": "用结构化描述明确主体、动作、环境、镜头和限制条件。",
+      "outline": [
+        "拆解有效提示词",
+        "保持一个核心动作",
+        "参考图与文字分工",
+        "单变量比较两轮结果"
+      ],
+      "output": "一组提示词与修改对照记录",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "所有生成任务",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F07",
+      "title": "角色与产品一致性：建立可复用资产包",
+      "hours": 1,
+      "tools": "画布／导演台",
+      "intro": "建立角色、产品、场景与风格参照，减少跨镜头漂移。",
+      "outline": [
+        "建立角色或产品卡",
+        "选择标准参考图",
+        "锁定造型与色彩",
+        "核对跨镜头差异"
+      ],
+      "output": "角色／产品卡及3张一致性候选图",
+      "prereq": "—",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "品牌／短剧／IP",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F08",
+      "title": "关键帧设计：先定画面，再生成运动",
+      "hours": 1,
+      "tools": "画布",
+      "intro": "学习用起始画面、结束目标和动作衔接控制视频镜头。",
+      "outline": [
+        "设计首帧构图",
+        "安排终点画面",
+        "检查动作可达性",
+        "比较不同关键帧结果"
+      ],
+      "output": "一组首尾画面与动作说明",
+      "prereq": "—",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "广告／特效／短剧",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F09",
+      "title": "视频生成诊断：镜头为什么失败",
+      "hours": 1,
+      "tools": "画布／配套视频模型",
+      "intro": "识别动作畸变、穿帮和运动失控，选择成本较低的修复方案。",
+      "outline": [
+        "匹配文生与图生路径",
+        "控制动作复杂度",
+        "拆解失败原因",
+        "比较重生成、替换与剪辑补救"
+      ],
+      "output": "一个镜头的修复前后对照",
+      "prereq": "—",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "镜头生产／质检",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F10",
+      "title": "配音与声音：让画面有节奏和情绪",
+      "hours": 1,
+      "tools": "配套音频工具＋剪辑",
+      "intro": "为短片设计旁白、音乐与音效，保持听感清楚。",
+      "outline": [
+        "改写可朗读文本",
+        "调整语速停顿",
+        "搭建声音层次",
+        "检查授权与混音"
+      ],
+      "output": "一段20—30秒声音设计练习",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "扩展",
+      "audience": "口播／微课／多语种",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F11",
+      "title": "剪辑与包装：把镜头组装成片",
+      "hours": 1,
+      "tools": "配套剪辑工具",
+      "intro": "用已有素材完成粗剪、字幕、封面与适配导出。",
+      "outline": [
+        "按脚本粗剪",
+        "压缩空镜与停顿",
+        "统一字幕和音量",
+        "导出横竖版本"
+      ],
+      "output": "一条15—30秒练习成片",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "所有成片任务",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "F12",
+      "title": "成片审核：质量、授权与AI标识",
+      "hours": 1,
+      "tools": "通用／配套剪辑",
+      "intro": "建立交付前的检查习惯，区分课堂样片与可公开发布作品。",
+      "outline": [
+        "逐项检查画面与事实",
+        "核对肖像、声音和素材授权",
+        "学习生成内容声明与标识",
+        "整理来源及审核记录"
+      ],
+      "output": "作品自查表与素材来源表",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "所有公开发布任务",
+      "group": "通用基础",
+      "prereq_ids": []
+    },
+    {
+      "id": "T01",
+      "title": "画布工具上手：做出第一条产品短片",
+      "hours": 2,
+      "tools": "画布＋配套剪辑",
+      "intro": "通过一个低复杂度产品案例，串联策划、图片、视频与成片。",
+      "outline": [
+        "认识项目和素材组织",
+        "改写模板脚本",
+        "生成关键画面与短镜头",
+        "拼接、审核并导出"
+      ],
+      "output": "一条10—15秒、2—3镜产品练习片",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "产品宣传／创作入门",
+      "group": "工具入门",
+      "prereq_ids": []
+    },
+    {
+      "id": "T02",
+      "title": "转绘工具上手：拆解并重做一段视频",
+      "hours": 2,
+      "tools": "转绘＋配套剪辑",
+      "intro": "用自摄或授权素材学习视频反推、风格改写和转绘输出。",
+      "outline": [
+        "判断源视频可用性",
+        "反推镜头和动作",
+        "改写风格与视觉资产",
+        "转绘、对照与剪辑"
+      ],
+      "output": "一段5—10秒转绘样片及拆解表",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "风格改编／跨语种内容",
+      "group": "工具入门",
+      "prereq_ids": []
+    },
+    {
+      "id": "T03",
+      "title": "导演台上手：从短剧本到剧情样片",
+      "hours": 2,
+      "tools": "导演台＋配套剪辑",
+      "intro": "围绕单场景短剧本体验剧本、分镜、资产和成片的完整流程。",
+      "outline": [
+        "输入并校正短剧本",
+        "确认角色与分镜",
+        "生成并替换问题镜头",
+        "拼接、配音与自查"
+      ],
+      "output": "一条20—30秒、单场景剧情练习片",
+      "prereq": "—",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "短剧／漫剧创作",
+      "group": "工具入门",
+      "prereq_ids": []
+    },
+    {
+      "id": "P01",
+      "title": "TVC广告：做一条15秒品牌概念片",
+      "hours": 2,
+      "tools": "画布＋配套剪辑",
+      "intro": "将一个品牌主张转成有视觉记忆点的商业广告样片。",
+      "outline": [
+        "明确品牌主张",
+        "设计主视觉与3—4镜脚本",
+        "制作关键镜头",
+        "完成品牌收尾和质检"
+      ],
+      "output": "一条15秒TVC概念样片与创意说明",
+      "prereq": "T01",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "品牌方／广告工作室",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P02",
+      "title": "电商产品视频：让商品卖点可视化",
+      "hours": 2,
+      "tools": "画布＋配套剪辑",
+      "intro": "从商品图片出发制作展示、使用场景和卖点字幕。",
+      "outline": [
+        "提炼一个真实卖点",
+        "保持商品外观",
+        "生成场景镜头",
+        "完成字幕与行动提示"
+      ],
+      "output": "一条15—20秒产品展示样片",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "电商商家／品牌运营",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P03",
+      "title": "本地商家宣传：一条片讲清到店理由",
+      "hours": 2,
+      "tools": "画布＋配套剪辑",
+      "intro": "为咖啡店、民宿等真实场景设计可交付的轻宣传片。",
+      "outline": [
+        "整理商家真实素材",
+        "提炼到店理由",
+        "补充氛围镜头",
+        "核对地址、价格和活动信息"
+      ],
+      "output": "一条20—30秒商家宣传样片",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "本地商家／代运营",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P04",
+      "title": "产品与服务讲解：把复杂流程讲明白",
+      "hours": 2,
+      "tools": "画布＋配套录屏、剪辑",
+      "intro": "把操作说明或服务流程转成易懂的视频讲解。",
+      "outline": [
+        "确定用户任务",
+        "改写三步流程脚本",
+        "组合图示与真实录屏",
+        "制作字幕并核对步骤"
+      ],
+      "output": "一条30—45秒流程讲解样片",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "扩展",
+      "audience": "软件服务／机构宣传",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P05",
+      "title": "数字人口播：做一条可信的讲解视频",
+      "hours": 2,
+      "tools": "画布组织素材＋配套数字人能力",
+      "intro": "以授权形象和声音制作讲解型口播，处理口型、停顿和辅助画面。",
+      "outline": [
+        "改写口语脚本",
+        "配置授权形象和音色",
+        "生成口播并检查口型",
+        "添加辅助镜头和字幕"
+      ],
+      "output": "一条30—45秒数字人口播样片",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "企业宣传／教师／个人IP",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P06",
+      "title": "教育微课：把一个知识点讲懂",
+      "hours": 2,
+      "tools": "画布＋配套录屏、配音、剪辑",
+      "intro": "面向开放大学和社会培训制作“一个问题、一种方法、一道练习”的教学短视频。",
+      "outline": [
+        "设定可检查的学习目标",
+        "写解释与示例",
+        "制作图示与讲解",
+        "加入自测并审核知识准确性"
+      ],
+      "output": "一条45—60秒教学样片及1道自测题",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "首发",
+      "audience": "教师／培训机构／知识服务",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P07",
+      "title": "不出镜知识视频：用原创解释做内容",
+      "hours": 2,
+      "tools": "画布＋配套配音、剪辑",
+      "intro": "用原创讲解和证据支撑的画面制作不出镜知识内容。",
+      "outline": [
+        "选定窄问题并核验事实",
+        "写原创解说",
+        "匹配图示与镜头",
+        "完成信息来源与字幕"
+      ],
+      "output": "一条30—45秒知识视频样片",
+      "prereq": "T01",
+      "level": "入门",
+      "priority": "扩展",
+      "audience": "知识账号／机构内容",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P08",
+      "title": "高传播创意短视频：反差、悬念与循环",
+      "hours": 2,
+      "tools": "画布＋配套剪辑",
+      "intro": "练习常见“爆款”叙事结构，把传播想法转成可测试的创意样片。",
+      "outline": [
+        "拆解传播机制",
+        "改写原创反差梗",
+        "制作主镜头与收尾",
+        "形成两个开头测试方案"
+      ],
+      "output": "一条10—20秒创意样片＋两版开头方案",
+      "prereq": "T01",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "短视频创作者／营销团队",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P09",
+      "title": "风格转绘：让同一段素材呈现新表达",
+      "hours": 2,
+      "tools": "转绘＋配套剪辑",
+      "intro": "以自摄动作片段练习风格转换，关注人物、运动和时序稳定。",
+      "outline": [
+        "筛选5—10秒源片",
+        "制作风格基准",
+        "完成一版转绘与局部修正",
+        "比较画面闪烁和叙事效果"
+      ],
+      "output": "一段转绘样片＋原片对照与风格说明",
+      "prereq": "T02",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "创意工作室／原创账号",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T02"
+      ]
+    },
+    {
+      "id": "P10",
+      "title": "视频出海本地化：从换语言到换表达",
+      "hours": 2,
+      "tools": "转绘＋配套翻译、配音、剪辑",
+      "intro": "把自有或授权样片改成适合一个目标市场的内容版本。",
+      "outline": [
+        "选定目标受众",
+        "改写文化语境和文案",
+        "处理配音、字幕与画面",
+        "审核原创价值和发布要求"
+      ],
+      "output": "一条15—30秒本地化样片＋双语脚本与改写表",
+      "prereq": "T02",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "跨境商家／海外内容服务",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T02"
+      ]
+    },
+    {
+      "id": "P11",
+      "title": "AI短剧：完成一个有反转的剧情场景",
+      "hours": 2,
+      "tools": "导演台＋配套剪辑",
+      "intro": "围绕两人以内、一个场景的冲突完成短剧情制作。",
+      "outline": [
+        "写目标与冲突",
+        "拆解4—6镜并固定角色",
+        "生成关键表演镜头",
+        "剪出反转与声音节奏"
+      ],
+      "output": "一条30—45秒短剧场景样片",
+      "prereq": "T03",
+      "level": "进阶",
+      "priority": "首发",
+      "audience": "短剧工作室／剧情账号",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T03"
+      ]
+    },
+    {
+      "id": "P12",
+      "title": "AI漫剧：把原创故事做成动态片段",
+      "hours": 2,
+      "tools": "导演台＋配套配音、剪辑",
+      "intro": "把原创或已获授权的短故事转成角色稳定、节奏清楚的动态漫片段。",
+      "outline": [
+        "压缩故事为一场戏",
+        "建立人物与画风",
+        "设计关键动作和分镜",
+        "配音、剪辑与连载钩子"
+      ],
+      "output": "一条20—30秒漫剧样片＋后续两集梗概",
+      "prereq": "T03",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "漫剧团队／原创IP",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T03"
+      ]
+    },
+    {
+      "id": "P13",
+      "title": "文旅与文化短片：让地方故事被看见",
+      "hours": 2,
+      "tools": "画布／导演台＋配套剪辑",
+      "intro": "围绕一项地方文化或一个景点制作叙事型宣传样片。",
+      "outline": [
+        "核验文化事实",
+        "找到人物或物件线索",
+        "结合真实素材与生成画面",
+        "完成出处和生成说明"
+      ],
+      "output": "一条20—30秒文旅文化样片",
+      "prereq": "T01/T03",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "文旅机构／文化传播",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01",
+        "T03"
+      ]
+    },
+    {
+      "id": "P14",
+      "title": "实拍＋AI特效：做一个可用的创意镜头",
+      "hours": 2,
+      "tools": "画布＋配套合成、剪辑",
+      "intro": "在自摄镜头中加入生成元素，练习构图、遮挡与声音衔接。",
+      "outline": [
+        "规划简单实拍",
+        "匹配机位光线",
+        "生成或替换局部元素",
+        "合成并检查接缝"
+      ],
+      "output": "一段5—8秒特效镜头＋前后对照",
+      "prereq": "T01",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "广告／活动传播／创意工作室",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "P15",
+      "title": "音乐视觉短片：把节奏变成画面",
+      "hours": 2,
+      "tools": "画布＋配套音频、剪辑",
+      "intro": "为自有或授权音乐设计画面节奏与视觉主题。",
+      "outline": [
+        "标记节拍与段落",
+        "统一视觉主题",
+        "制作2—3个短镜头",
+        "完成卡点与首尾衔接"
+      ],
+      "output": "一条10—15秒音乐视觉片段",
+      "prereq": "T01",
+      "level": "进阶",
+      "priority": "扩展",
+      "audience": "音乐人／活动团队",
+      "group": "案例实战",
+      "prereq_ids": [
+        "T01"
+      ]
+    },
+    {
+      "id": "B01",
+      "title": "接单与报价：把创作拆成可计价工作",
+      "hours": 1,
+      "tools": "通用",
+      "intro": "为视频服务限定范围，估算工时、生成成本和修改成本。",
+      "outline": [
+        "读客户需求",
+        "拆分脚本、镜头和版本",
+        "计算成本与报价",
+        "列明修改次数、用途和交付物"
+      ],
+      "output": "一份模拟报价单与服务范围说明",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "首发",
+      "audience": "兼职／自由职业／工作室",
+      "group": "职业交付",
+      "prereq_ids": []
+    },
+    {
+      "id": "B02",
+      "title": "修改与交付：让客户意见变成任务",
+      "hours": 1,
+      "tools": "通用／配套剪辑",
+      "intro": "处理意见冲突、版本管理和项目归档，提高交付可追踪性。",
+      "outline": [
+        "把反馈改成任务",
+        "区分范围内修改与新增需求",
+        "管理文件版本",
+        "打包母版、字幕和授权记录"
+      ],
+      "output": "一份交付包目录＋修改确认单",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "首发",
+      "audience": "兼职／自由职业／工作室",
+      "group": "职业交付",
+      "prereq_ids": []
+    },
+    {
+      "id": "B03",
+      "title": "作品集与获客：让客户看懂你能做什么",
+      "hours": 1,
+      "tools": "通用",
+      "intro": "针对一个细分客户群设计案例展示与服务介绍。",
+      "outline": [
+        "选择客户类型",
+        "说明案例目标和本人贡献",
+        "展示过程与结果",
+        "写服务介绍及模拟沟通话术"
+      ],
+      "output": "一页作品集结构＋一项服务介绍",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "首发",
+      "audience": "兼职／自由职业／求职",
+      "group": "职业交付",
+      "prereq_ids": []
+    },
+    {
+      "id": "B04",
+      "title": "发布与复盘：用数据决定下一版怎么改",
+      "hours": 1,
+      "tools": "通用／平台示例数据",
+      "intro": "用清楚的实验问题分析开头、完播和行动反馈。",
+      "outline": [
+        "定义曝光、观看和转化口径",
+        "一次只测试一个变量",
+        "识别小样本限制",
+        "形成下一轮修改方案"
+      ],
+      "output": "一份基于教学数据的A/B复盘表",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "扩展",
+      "audience": "账号运营／商家服务",
+      "group": "职业交付",
+      "prereq_ids": []
+    },
+    {
+      "id": "B05",
+      "title": "系列化生产：把一条样片变成一组内容",
+      "hours": 1,
+      "tools": "画布／导演台＋项目模板",
+      "intro": "沉淀脚本、资产与审核模板，为周期性内容服务建立生产节奏。",
+      "outline": [
+        "区分可复用与须原创的部分",
+        "建立命名和版本规则",
+        "排出5期主题",
+        "分配生成与审核任务"
+      ],
+      "output": "一份5期内容计划及生产模板",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "扩展",
+      "audience": "机构运营／工作室",
+      "group": "职业交付",
+      "prereq_ids": []
+    },
+    {
+      "id": "B06",
+      "title": "作品诊断与路演：完成一次模拟验收",
+      "hours": 1,
+      "tools": "通用／已有项目",
+      "intro": "以已有样片为对象说明创意、制作过程、成本和改进路径。",
+      "outline": [
+        "按任务书展示",
+        "解释关键取舍",
+        "对照量规互评",
+        "安排一轮关键修订"
+      ],
+      "output": "一份作品诊断表与改进计划",
+      "prereq": "—",
+      "level": "职业应用",
+      "priority": "首发",
+      "audience": "课程结业／项目展示",
+      "group": "职业交付",
+      "prereq_ids": []
+    }
+  ],
+  "presets": [
+    {
+      "name": "1天｜零基础产品视频体验",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P02",
+          "F12"
+        ]
+      ],
+      "result": "一条10—15秒工具练习片与一条15—20秒产品样片，附自查表。"
+    },
+    {
+      "name": "1天｜开放大学教师微课制作",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P06",
+          "F12"
+        ]
+      ],
+      "result": "一条45—60秒教学样片、一道自测题与素材来源表。"
+    },
+    {
+      "name": "2天｜商业广告与交付入门",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P02",
+          "F12"
+        ],
+        [
+          "F03",
+          "F04",
+          "P01",
+          "B01",
+          "B02"
+        ]
+      ],
+      "result": "产品样片、TVC概念样片及模拟报价与交付说明。"
+    },
+    {
+      "name": "3天｜兼职视频服务起步",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P02",
+          "F12"
+        ],
+        [
+          "P05",
+          "P03",
+          "B03",
+          "B04"
+        ],
+        [
+          "F02",
+          "F05",
+          "P01",
+          "B01",
+          "B02"
+        ]
+      ],
+      "result": "形成产品、口播、商家宣传和广告的课堂案例基础，并完成一种服务的作品集与交付方案。"
+    },
+    {
+      "name": "3天｜转绘与原创内容出海",
+      "days": [
+        [
+          "F01",
+          "T02",
+          "P09",
+          "F12"
+        ],
+        [
+          "T01",
+          "P07",
+          "F03",
+          "F04"
+        ],
+        [
+          "P10",
+          "B01",
+          "B02",
+          "B04",
+          "B06"
+        ]
+      ],
+      "result": "转绘对照样片、原创知识样片和一个目标市场的本地化样片；完成模拟交付。"
+    },
+    {
+      "name": "3天｜导演台短剧与漫剧",
+      "days": [
+        [
+          "F01",
+          "T03",
+          "F07",
+          "F05",
+          "F12"
+        ],
+        [
+          "F04",
+          "F08",
+          "P11",
+          "P12"
+        ],
+        [
+          "F09",
+          "F10",
+          "F11",
+          "B01",
+          "B02",
+          "B06"
+        ]
+      ],
+      "result": "一条短剧场景、一条漫剧片段及声音、剪辑和交付修订记录。F08使用教师准备的关键帧工程。"
+    },
+    {
+      "name": "5天｜一周综合创作营",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P02",
+          "F12"
+        ],
+        [
+          "F03",
+          "F04",
+          "F05",
+          "F07",
+          "P01"
+        ],
+        [
+          "P05",
+          "P06",
+          "F10",
+          "B05"
+        ],
+        [
+          "T02",
+          "P09",
+          "P10"
+        ],
+        [
+          "T03",
+          "P11",
+          "B01",
+          "B06"
+        ]
+      ],
+      "result": "体验三工具生产路径，形成多类样片；选择其中一条完善为结业作品，并做模拟报价与路演。"
+    },
+    {
+      "name": "7天｜作品集强化营",
+      "days": [
+        [
+          "F01",
+          "T01",
+          "P02",
+          "F12"
+        ],
+        [
+          "F03",
+          "F04",
+          "F05",
+          "F07",
+          "P01"
+        ],
+        [
+          "P05",
+          "P06",
+          "F10",
+          "B05"
+        ],
+        [
+          "T02",
+          "P09",
+          "P10"
+        ],
+        [
+          "T03",
+          "P11",
+          "B01",
+          "B06"
+        ],
+        [
+          "F08",
+          "P12",
+          "F09",
+          "P14"
+        ],
+        [
+          "B02",
+          "B03",
+          "B04",
+          "P08",
+          "F11"
+        ]
+      ],
+      "result": "在5天营基础上强化漫剧、特效与传播测试，精选并完善3件作品用于作品集。"
+    }
+  ],
+  "sources": [
+    {
+      "title": "IAB：2026 Digital Video Ad Spend & Strategy Report",
+      "date": "2026-07-14",
+      "url": "https://www.iab.com/insights/video-ad-spend-report-2026/",
+      "note": "公开摘要将效果衡量、受众信息和AI列为视频广告的重要议题；全文需账户，未引用付费正文。课程据此加入广告制作与复盘，而非只教生成。"
+    },
+    {
+      "title": "Fiverr：2025 Fall Business Trends Index",
+      "date": "2025-12-10",
+      "url": "https://www.fiverr.com/news/2025-fall-business-trends-index",
+      "note": "其平台前六个月AI视频创作者相关搜索增长66%。这是单平台搜索信号，不代表成交增长、国内市场规模或学员收入。"
+    },
+    {
+      "title": "YouTube：Auto dubbing, explained",
+      "date": "2026-05-15",
+      "url": "https://blog.youtube/creator-and-artist-stories/youtube-auto-dubbing-explained/",
+      "note": "官方介绍多语种自动配音及分语言表现查看。课程据此将出海拆成语境改写、配音字幕和效果复盘；功能开放以账号为准。"
+    },
+    {
+      "title": "广电总局：微短剧精品创作传播计划实施方案",
+      "date": "2026-05-26",
+      "url": "https://www.nrta.gov.cn/art/2026/5/26/art_113_73378.html",
+      "note": "文件强调原创、精品化、地方文化与面向世界传播。可作为短剧、文旅和文化类课程选题参考，不构成个人盈利依据。"
+    },
+    {
+      "title": "YouTube：频道获利政策",
+      "date": "2026-09-21查阅",
+      "url": "https://support.google.com/youtube/answer/1311392?hl=en",
+      "note": "平台强调原创价值，重复批量内容与轻度修改的搬运可能不符合获利要求；有版权许可也不等于自动符合获利规则。"
+    },
+    {
+      "title": "国家网信办：人工智能生成合成内容标识办法",
+      "date": "2025-03-14发布；2025-09-01施行",
+      "url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm",
+      "note": "用于F12的生成内容声明与标识教学；实际发布需按适用规则及平台要求操作，不能用教学自查替代正式审核。"
+    }
+  ]
+}</script><script>
+'use strict';
+const data=JSON.parse(document.getElementById('data').textContent), courses=data.courses, byId=Object.fromEntries(courses.map(c=>[c.id,c]));
+const selected=new Set();let chosenPlan=null;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const el=id=>document.getElementById(id);
+function tab(id){document.querySelectorAll('[role=tab]').forEach(b=>b.setAttribute('aria-selected',String(b.getAttribute('aria-controls')===id)));document.querySelectorAll('[role=tabpanel]').forEach(p=>p.hidden=p.id!==id)}
+document.querySelectorAll('[role=tab]').forEach(b=>b.addEventListener('click',()=>tab(b.getAttribute('aria-controls'))));
+function filtered(){let q=el('search').value.toLowerCase();return courses.filter(c=>(!el('category').value||c.group===el('category').value)&&(!el('level').value||c.level===el('level').value)&&JSON.stringify(c).toLowerCase().includes(q))}
+function render(){const cs=filtered();el('count').textContent=`显示 ${cs.length} / 36 门`;el('catalog').innerHTML=cs.map(c=>`<article class="course"><div class="meta"><span class="code">${c.id}</span><span>${c.group}</span><span>${c.hours}小时</span><span>${c.level}</span></div><h3>${esc(c.title)}</h3><p>${esc(c.intro)}</p><p><strong>课堂成果</strong> · ${esc(c.output)}</p><details><summary>查看简纲、工具与前置</summary><ol>${c.outline.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p><strong>工具：</strong>${esc(c.tools)}<br><strong>适用：</strong>${esc(c.audience)}<br><strong>前置：</strong>${c.prereq_ids.length?c.prereq_ids.join(' 或 ')+'，或等效操作能力':'无需前置课程；完成课前准备'}</p></details><label><input type="checkbox" data-course="${c.id}" ${selected.has(c.id)?'checked':''}>加入我的组合</label></article>`).join('')||'<p class="empty">没有符合条件的课程，请换一个关键词。</p>';document.querySelectorAll('[data-course]').forEach(x=>x.addEventListener('change',()=>{chosenPlan=null;if(x.checked)selected.add(x.dataset.course);else selected.delete(x.dataset.course);update()}))}
+function update(){let cs=[...selected].map(x=>byId[x]);let h=cs.reduce((n,c)=>n+c.hours,0);el('hours').textContent=h;el('chosen-count').textContent=cs.length;el('days').textContent=h?`约 ${(h/6).toFixed(1)} 个教学日（6小时／日）`:'按每天6小时折算';el('chosen').innerHTML=cs.map(c=>`<li>${c.id} ${esc(c.title.split('：')[0])} · ${c.hours}h</li>`).join('');let missing=cs.filter(c=>c.prereq_ids.length&&!c.prereq_ids.some(x=>selected.has(x)));el('requirements').innerHTML=(chosenPlan?`<p class="hint">已载入：${esc(chosenPlan.name)}，导出保留逐日课序。</p>`:'')+(missing.length?`<div class="notice">以下课程需要已有工具能力，或补选入门课：<br>${missing.map(c=>`${c.id} → ${c.prereq_ids.join(' 或 ')}`).join('<br>')}</div>`:'')+(cs.some(c=>c.id.startsWith('P'))&&!selected.has('F12')?'<p class="hint">请在项目中落实F12发布前检查；可按需加选完整审核课。</p>':'');printTable()}
+function printTable(){let cs=selected.size?[...selected].map(x=>byId[x]):courses;el('print-table').innerHTML=`<h2>${selected.size?'所选课程':'完整课程'}清单</h2><p class="printnote">${cs.length}门 · ${cs.reduce((n,c)=>n+c.hours,0)}小时 · 工具前置可由等效操作能力替代。此表仅为选课清单，未包含全部教学说明。</p><table><thead><tr><th>编号</th><th>课程／小时</th><th>简介与简纲</th><th>成果／前置</th></tr></thead><tbody>${cs.map(c=>`<tr><td>${c.id}</td><td>${esc(c.title)}<br>${c.hours}h</td><td>${esc(c.intro)}<br>${esc(c.outline.join(' → '))}</td><td>${esc(c.output)}<br>前置：${esc(c.prereq)}</td></tr>`).join('')}</tbody></table>`}
+['search','category','level'].forEach(id=>el(id).addEventListener(id==='search'?'input':'change',render));
+el('clear').addEventListener('click',()=>{selected.clear();chosenPlan=null;render();update()});el('print').addEventListener('click',()=>window.print());
+el('export').addEventListener('click',()=>{if(!selected.size){el('requirements').innerHTML='<div class="notice" role="alert">请先勾选课程，或载入一个按天数组课方案。</div>';return}let cs=[...selected].map(x=>byId[x]);let lines=['AIGC视频创作选课单',`共${cs.length}门，${cs.reduce((n,c)=>n+c.hours,0)}小时（净教学时间）`];if(chosenPlan){lines.push(chosenPlan.name);chosenPlan.days.forEach((d,i)=>lines.push(`第${i+1}天：`+d.join(' → ')+'（6h）'))}cs.forEach(c=>lines.push(`\n${c.id} ${c.title}（${c.hours}h）\n简介：${c.intro}\n简纲：${c.outline.join(' → ')}\n成果：${c.output}\n工具：${c.tools}\n前置：${c.prereq}`));lines.push('\n按工具前置排序；生成额度与订阅费用另列。课堂样片须经自查及必要修订。');let a=document.createElement('a'),u=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n')],{type:'text/plain;charset=utf-8'}));a.href=u;a.download='AIGC选课单.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)});
+el('presets').innerHTML=data.presets.map((p,i)=>`<article class="preset"><div class="titleline"><h3>${esc(p.name)}</h3><button class="btn primary" data-preset="${i}">载入这套组合 · ${p.days.length*6}h</button></div>${p.days.map((d,j)=>`<div class="day"><strong>第${j+1}天</strong><div>${d.map(x=>`<span>${x} ${esc(byId[x].title.split('：')[0])} · ${byId[x].hours}h</span>`).join('')} <b>＝6h</b></div></div>`).join('')}<p><strong>组合成果：</strong>${esc(p.result)}</p></article>`).join('');
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{chosenPlan=data.presets[+b.dataset.preset];selected.clear();chosenPlan.days.flat().forEach(x=>selected.add(x));el('search').value='';el('category').value='';el('level').value='';render();update();tab('menu');window.scrollTo({top:0,behavior:'smooth'})}));
+document.querySelectorAll('[data-ids]').forEach(box=>{box.innerHTML=box.dataset.ids.split(' ').map(x=>`<button data-show="${x}" aria-label="查看${x} ${esc(byId[x].title)}">${x}</button>`).join('')});document.querySelectorAll('[data-show]').forEach(b=>b.addEventListener('click',()=>{el('search').value=b.dataset.show;el('category').value='';el('level').value='';render();tab('menu')}));
+el('sources').innerHTML=data.sources.map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a>（${esc(s.date)}）<br>${esc(s.note)}</li>`).join('');render();update();
+</script></body></html>
