@@ -1,4 +1,4 @@
-# AIGC视频创作课程菜单 v2.0
+# AIGC视频创作课程菜单
 
 [在线课程菜单](https://py198964.github.io/aigc-course-menu/)
 
@@ -10,4 +10,4 @@
 - 本地保存、组合JSON导入导出、Markdown教案与打印PDF。
 - 无后端、无外部AI服务，教案按课程大纲规则编排。
 
-GitHub Pages从main分支根目录发布。2026年9月22日更新。
+GitHub Pages从main分支根目录发布。课程资料日期：2026年9月22日。
