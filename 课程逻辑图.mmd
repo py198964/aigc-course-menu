@@ -3,9 +3,11 @@ flowchart LR
  F --> T2[T02 转绘]
  F --> T3[T03 导演台]
  T1 --> P1[P01-P08与P13-P15]
- T2 --> P2[P09-P10与P16-P25 转绘专题]
+ T1 --> A[P18与P25 画布动作迁移]
+ T2 --> P2[P09-P10 P16-P17 P19-P24 Redraw重建]
  T3 --> P3[P11-P12 短剧漫剧]
  P1 --> B[B01-B06 职业交付]
+ A --> B
  P2 --> B
  P3 --> B
  F --> M[F13 镜头蓝图与动作调度]
@@ -17,5 +19,5 @@ flowchart LR
  classDef business fill:#fff3e0,color:#935418;
  class F,M foundation;
  class T1,T2,T3 tool;
- class P1,P2,P3 practice;
+ class P1,P2,P3,A practice;
  class B business;
