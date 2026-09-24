@@ -1,5 +1,5 @@
 flowchart LR
- F[按需补基础 F01-F12] --> T1[T01 画布]
+ F[按需补基础 F01-F13] --> T1[T01 画布]
  F --> T2[T02 转绘]
  F --> T3[T03 导演台]
  T1 --> P1[P01-P08与P13-P15]
@@ -8,11 +8,14 @@ flowchart LR
  P1 --> B[B01-B06 职业交付]
  P2 --> B
  P3 --> B
+ F --> M[F13 镜头蓝图与动作调度]
+ M --> P2
+ M --> P3
  classDef foundation fill:#eef4ff,color:#225cc5;
  classDef tool fill:#f2edfc,color:#7040b4;
  classDef practice fill:#e8f5f0,color:#086a56;
  classDef business fill:#fff3e0,color:#935418;
- class F foundation;
+ class F,M foundation;
  class T1,T2,T3 tool;
  class P1,P2,P3 practice;
  class B business;
