@@ -1,0 +1,11 @@
+.venv/
+platform/runtime/
+platform/.env
+platform/__pycache__/
+platform/**/*.pyc
+platform/**/__pycache__/
+platform/.pytest_cache/
+platform/test-results/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
