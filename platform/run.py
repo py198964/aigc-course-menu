@@ -8,7 +8,7 @@ def read_env():
             raw=raw.strip()
             if not raw or raw.startswith('#') or '=' not in raw:continue
             k,v=raw.split('=',1)
-            if k.strip() in {'APP_ORIGIN','APP_HOST','APP_PORT','COURSE_DATA_DIR','AI_BASE_URL','AI_API_KEY','AI_MODEL','BOOTSTRAP_PASSWORD'}:
+            if k.strip() in {'APP_ORIGIN','APP_HOST','APP_PORT','COURSE_DATA_DIR','AI_BASE_URL','AI_API_KEY','AI_MODEL','BOOTSTRAP_PASSWORD','MAX_UPLOAD_MB'}:
                 os.environ.setdefault(k.strip(),v.strip().strip('"').strip("'"))
 
 if __name__=='__main__':

@@ -167,3 +167,29 @@ def test_ai_copy_stays_with_validated_plan_and_revision_never_reuses(env,monkeyp
     seeded=o.get('/api/catalog',params={'org':org}).json()[0];mid=seeded['id'];v=o.get('/api/manage/modules/'+mid).json()['versions'][0]
     assert o.put('/api/manage/modules/'+mid,json={'data':v['data'],'revision':v['revision']}).status_code==200
     assert o.put('/api/manage/modules/'+mid,json={'data':v['data'],'revision':v['revision']}).status_code==409
+
+def test_resource_preview_permissions_ranges_types_and_upload_limits(env,monkeypatch):
+    o,org,new=env;public=TestClient(server.app);customer=new();mid=create_module(o,org)
+    samples=[('slides.pdf',b'%PDF-1.4\nTest PDF content\n%%EOF','public'),('recording.webm',b'\x1aE\xdf\xa3'+b'webm-test'*200,'public'),('private.mp4',b'\x00\x00\x00\x18ftypisom'+b'x'*500,'organization'),('slides.pptx',b'PK-test-pptx','public')]
+    assets={}
+    for filename,content,visibility in samples:
+        r=o.post('/api/manage/modules/'+mid+'/assets',files={'file':(filename,content)},data={'visibility':visibility});assert r.status_code==200,r.text;assets[filename]=r.json()['id']
+    assert public.get('/api/assets/'+assets['recording.webm']+'/preview').status_code==404
+    publish(o,mid)
+    pdf=public.get('/api/assets/'+assets['slides.pdf']+'/preview');assert pdf.status_code==200
+    assert pdf.headers['content-type'].startswith('application/pdf') and pdf.headers['content-disposition'].startswith('inline')
+    assert pdf.headers['x-frame-options']=='SAMEORIGIN'
+    assert "frame-ancestors 'self'" in pdf.headers['content-security-policy']
+    video=public.get('/api/assets/'+assets['recording.webm']+'/preview',headers={'Range':'bytes=0-15'})
+    assert video.status_code==206 and len(video.content)==16 and video.headers['content-type']=='video/webm'
+    assert customer.get('/api/assets/'+assets['private.mp4']+'/preview').status_code==404
+    assert o.get('/api/assets/'+assets['private.mp4']+'/preview').status_code==200
+    assert public.get('/api/assets/'+assets['slides.pptx']+'/preview').status_code==415
+    assert public.get('/api/assets/'+assets['slides.pptx']).headers['content-disposition'].startswith('attachment')
+    # A failed large upload leaves no database row or partial file.
+    v=o.get('/api/manage/modules/'+mid).json()['versions'][0];o.put('/api/manage/modules/'+mid,json={'data':v['data'],'revision':v['revision']})
+    monkeypatch.setattr(server,'MAX_UPLOAD_MB',1);before=set(server.DATA.joinpath('files').iterdir())
+    r=o.post('/api/manage/modules/'+mid+'/assets',files={'file':('large.mp4',b'x'*(2*1024*1024))});assert r.status_code==413
+    assert set(server.DATA.joinpath('files').iterdir())==before
+    r=o.post('/api/manage/modules/'+mid+'/assets',files={'file':('empty.pdf',b'')});assert r.status_code==422
+    assert o.get('/api/assets/config').json()['max_upload_mb']==1

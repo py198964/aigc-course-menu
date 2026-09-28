@@ -13,9 +13,10 @@ from security import identity, role, is_member, safe_user, password_hash, passwo
 from domain import ModuleData, visible_version, public_course, publish_check, validate_plan, recommend, lesson_markdown
 
 initialize()
-app=FastAPI(title='机构课程平台',version='1.0.0',docs_url=None,redoc_url=None)
+app=FastAPI(title='机构课程平台',version='1.1.0',docs_url=None,redoc_url=None)
 ORIGIN=os.getenv('APP_ORIGIN','http://127.0.0.1:8765').rstrip('/')
 SECURE=ORIGIN.startswith('https://')
+MAX_UPLOAD_MB=max(1,min(2048,int(os.getenv('MAX_UPLOAD_MB','512'))))
 
 @app.middleware('http')
 async def safety(request,call_next):
@@ -24,14 +25,15 @@ async def safety(request,call_next):
         if origin and origin!=ORIGIN:return JSONResponse({'detail':'请求来源不匹配'},403)
         if request.headers.get('x-requested-with')!='course-platform':return JSONResponse({'detail':'缺少请求校验头'},403)
         try:
-            limit=27*1024*1024 if request.url.path.endswith('/assets') else 1024*1024
+            limit=(MAX_UPLOAD_MB+2)*1024*1024 if request.url.path.endswith('/assets') else 1024*1024
             if int(request.headers.get('content-length','0'))>limit:return JSONResponse({'detail':'请求过大'},413)
         except ValueError:return JSONResponse({'detail':'请求长度无效'},400)
     response=await call_next(request)
     response.headers['X-Content-Type-Options']='nosniff'
     response.headers['Referrer-Policy']='same-origin'
-    response.headers['X-Frame-Options']='DENY'
-    response.headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    preview=request.url.path.startswith('/api/assets/') and request.url.path.endswith('/preview')
+    response.headers['X-Frame-Options']='SAMEORIGIN' if preview else 'DENY'
+    response.headers['Content-Security-Policy']=("default-src 'none'; frame-ancestors 'self'" if preview else "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; media-src 'self'; frame-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
     if request.url.path.startswith('/api'):response.headers['Cache-Control']='no-store'
     return response
 
@@ -58,7 +60,7 @@ def session(d,u,response):
 @app.get('/api/health')
 def health():
     with connect() as d:d.execute('SELECT 1')
-    return {'ok':True,'version':'1.0.0'}
+    return {'ok':True,'version':'1.1.0'}
 
 @app.post('/api/auth/register')
 def register(data:Credentials,request:Request,response:Response):
@@ -293,24 +295,56 @@ def asset_list(d,mid,u,version=None):
     rows=d.execute('SELECT * FROM assets WHERE module_id=?'+(' AND version_id=?' if version else ''),(mid,version) if version else (mid,)).fetchall()
     return [{k:a[k] for k in ('id','name','size','visibility','version_id')} for a in rows if asset_allowed(d,a,u)]
 
+@app.get('/api/assets/config')
+def asset_config():return {'max_upload_mb':MAX_UPLOAD_MB}
+
 @app.post('/api/manage/modules/{mid}/assets')
 async def upload_asset(mid:str,request:Request,file:UploadFile=File(...),visibility:str=Form('organization')):
     u=identity(request)
     if visibility not in ('public','organization','project'):fail(422,'无效资源范围')
     suffix=Path(file.filename or '').suffix.lower()
-    if suffix not in ('.pdf','.docx','.pptx','.xlsx','.csv','.txt','.md','.json','.zip','.7z','.png','.jpg','.jpeg','.webp','.mp4','.mp3','.wav'):fail(422,'文件类型不支持')
-    content=await file.read(25*1024*1024+1)
-    if len(content)>25*1024*1024:fail(413,'单个文件不能超过25MB')
+    if suffix not in ('.pdf','.docx','.ppt','.pptx','.xlsx','.csv','.txt','.md','.json','.zip','.7z','.png','.jpg','.jpeg','.webp','.mp4','.webm','.mp3','.wav'):fail(422,'文件类型不支持')
     ident=uid();dest=DATA/'files'/ident
-    with connect(True) as d:
+    with connect() as d:
         m=module_access(d,mid,u,True)
         if not m['draft_id']:fail(409,'先保存一个修订草稿再上传资源')
         v=d.execute('SELECT state FROM versions WHERE id=?',(m['draft_id'],)).fetchone()
         if v['state']!='draft':fail(409,'待审核版本不能上传资源')
-        dest.write_bytes(content)
-        try:d.execute('INSERT INTO assets VALUES(?,?,?,?,?,?,?,?,?)',(ident,mid,m['draft_id'],m['org_id'],Path(file.filename).name,len(content),visibility,ident,now()));d.execute('UPDATE versions SET revision=revision+1 WHERE id=?',(m['draft_id'],));log(d,m['org_id'],u['id'],'asset.upload',ident)
-        except Exception:dest.unlink(missing_ok=True);raise
+        version=m['draft_id']
+    try:
+        size=0
+        with dest.open('xb') as target:
+            while chunk:=await file.read(1024*1024):
+                size+=len(chunk)
+                if size>MAX_UPLOAD_MB*1024*1024:fail(413,f'单个文件不能超过{MAX_UPLOAD_MB}MB')
+                target.write(chunk)
+        if size==0:fail(422,'不能上传空文件')
+        with connect(True) as d:
+            m=module_access(d,mid,u,True)
+            v=d.execute('SELECT state FROM versions WHERE id=?',(version,)).fetchone()
+            if m['draft_id']!=version or v['state']!='draft':fail(409,'上传期间课程状态已变化，请刷新后重试')
+            d.execute('INSERT INTO assets VALUES(?,?,?,?,?,?,?,?,?)',(ident,mid,version,m['org_id'],Path(file.filename).name,size,visibility,ident,now()))
+            d.execute('UPDATE versions SET revision=revision+1 WHERE id=?',(version,));log(d,m['org_id'],u['id'],'asset.upload',ident)
+    except BaseException:
+        dest.unlink(missing_ok=True)
+        raise
+    finally:await file.close()
     return {'id':ident,'name':file.filename}
+
+@app.get('/api/assets/{aid}/preview')
+def asset_preview(aid:str,request:Request):
+    u=identity(request,False)
+    with connect() as d:
+        a=d.execute('SELECT * FROM assets WHERE id=?',(aid,)).fetchone()
+        if not a or not asset_allowed(d,a,u):fail(404,'资源不存在或无权访问')
+    suffix=Path(a['name']).suffix.lower()
+    types={'.pdf':'application/pdf','.mp4':'video/mp4','.webm':'video/webm'}
+    if suffix not in types:fail(415,'此格式支持下载；PPT课件可另附PDF版以便在线预览')
+    path=DATA/'files'/a['path']
+    with path.open('rb') as f:header=f.read(16)
+    valid={'.pdf':header.startswith(b'%PDF-'),'.mp4':header[4:8]==b'ftyp','.webm':header.startswith(b'\x1aE\xdf\xa3')}
+    if not valid[suffix]:fail(415,'文件内容与预览格式不匹配，请下载原文件或重新上传')
+    return FileResponse(path,filename=a['name'],media_type=types[suffix],content_disposition_type='inline')
 
 @app.get('/api/assets/{aid}')
 def asset_download(aid:str,request:Request):
