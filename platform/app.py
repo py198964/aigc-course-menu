@@ -11,9 +11,11 @@ from pydantic import BaseModel, Field, ValidationError
 from database import ROOT, DATA, initialize, connect, uid, now, dump, parse, log
 from security import identity, role, is_member, safe_user, password_hash, password_ok, digest, throttle, fail, COOKIE, ROLES
 from domain import ModuleData, visible_version, public_course, publish_check, validate_plan, recommend, lesson_markdown
+from organizations import router as organization_router, MembershipData, member_rows, set_membership, department_check
 
 initialize()
-app=FastAPI(title='机构课程平台',version='1.1.0',docs_url=None,redoc_url=None)
+app=FastAPI(title='机构课程平台',version='1.2.0',docs_url=None,redoc_url=None)
+app.include_router(organization_router)
 ORIGIN=os.getenv('APP_ORIGIN','http://127.0.0.1:8765').rstrip('/')
 SECURE=ORIGIN.startswith('https://')
 MAX_UPLOAD_MB=max(1,min(2048,int(os.getenv('MAX_UPLOAD_MB','512'))))
@@ -60,7 +62,7 @@ def session(d,u,response):
 @app.get('/api/health')
 def health():
     with connect() as d:d.execute('SELECT 1')
-    return {'ok':True,'version':'1.1.0'}
+    return {'ok':True,'version':'1.2.0'}
 
 @app.post('/api/auth/register')
 def register(data:Credentials,request:Request,response:Response):
@@ -137,32 +139,32 @@ def members(org:str,request:Request):
     u=identity(request)
     with connect() as d:
         role(d,org,u,{'owner','admin'})
-        return [dict(x) for x in d.execute('SELECT u.id,u.name,u.email,m.role,m.state FROM members m JOIN users u ON u.id=m.user_id WHERE org_id=?',(org,))]
+        return member_rows(d,org)
 
-class MemberEdit(BaseModel):
-    role:Literal['owner','admin','teacher','operator']
-    state:Literal['active','disabled']='active'
+class MemberEdit(MembershipData): pass
 @app.put('/api/orgs/{org}/members/{person}')
 def member_edit(org:str,person:str,data:MemberEdit,request:Request):
     u=identity(request)
     with connect(True) as d:
-        actor=role(d,org,u,{'owner','admin'});m=d.execute('SELECT * FROM members WHERE org_id=? AND user_id=?',(org,person)).fetchone()
-        if not m:fail(404,'成员不存在')
-        if (m['role']=='owner' or data.role=='owner') and actor!='owner':fail(403,'负责人权限只能由负责人调整')
-        if m['role']=='owner' and m['state']=='active' and (data.role!='owner' or data.state!='active'):
-            n=d.execute("SELECT COUNT(*) FROM members WHERE org_id=? AND role='owner' AND state='active'",(org,)).fetchone()[0]
-            if n<=1:fail(409,'请先指定另一位负责人，不能停用最后一位负责人')
-        d.execute('UPDATE members SET role=?,state=? WHERE org_id=? AND user_id=?',(data.role,data.state,org,person));log(d,org,u['id'],'member.update',person,data.model_dump())
+        set_membership(d,org,person,data,u)
     return {'ok':True}
 
 class InviteData(BaseModel):
     email:str
-    role:Literal['admin','teacher','operator']='teacher'
+    role:Literal['admin','teacher','operator','learner']='learner'
+    department_id:str|None=Field(default=None,max_length=64)
+    job_title:str=Field(default='',max_length=100)
 @app.post('/api/orgs/{org}/invites')
 def invite(org:str,data:InviteData,request:Request):
     u=identity(request);token=secrets.token_urlsafe(32)
     with connect(True) as d:
-        role(d,org,u,{'owner','admin'});d.execute('INSERT INTO invites VALUES(?,?,?,?,?,?,0,?)',(uid(),org,email(data.email),data.role,digest(token),now()+7*86400,u['id']));log(d,org,u['id'],'member.invite',email(data.email),data.role)
+        role(d,org,u,{'owner','admin'});department_check(d,org,data.department_id)
+        address=email(data.email)
+        if d.execute('SELECT 1 FROM members m JOIN users u ON u.id=m.user_id WHERE m.org_id=? AND u.email=?',(org,address)).fetchone():fail(409,'此用户已是机构成员，请直接编辑成员')
+        invitation=uid()
+        d.execute('UPDATE invites SET used=2 WHERE org_id=? AND email=? AND used=0',(org,address))
+        d.execute('INSERT INTO invites VALUES(?,?,?,?,?,?,0,?)',(invitation,org,address,data.role,digest(token),now()+7*86400,u['id']))
+        d.execute('INSERT INTO invite_profiles VALUES(?,?,?)',(invitation,data.department_id,data.job_title.strip()));log(d,org,u['id'],'member.invite',address,data.role)
     return {'url':ORIGIN+'/?invite='+token,'expires_days':7,'note':'邀请链接由管理员自行交给收件人，系统未发送邮件。'}
 
 class AcceptInvite(BaseModel): token:str=Field(max_length=200)
@@ -174,7 +176,12 @@ def accept_invite(data:AcceptInvite,request:Request):
         if not inv:fail(404,'邀请已失效或不存在')
         if inv['email']!=u['email']:fail(403,'请使用被邀请的邮箱登录')
         old=d.execute('SELECT * FROM members WHERE org_id=? AND user_id=?',(inv['org_id'],u['id'])).fetchone()
-        if not old:d.execute('INSERT INTO members VALUES(?,?,?,?)',(inv['org_id'],u['id'],inv['role'],'active'))
+        if not old:
+            d.execute('INSERT INTO members VALUES(?,?,?,?)',(inv['org_id'],u['id'],inv['role'],'active'))
+            profile=d.execute('SELECT * FROM invite_profiles WHERE invite_id=?',(inv['id'],)).fetchone()
+            if profile:
+                department_check(d,inv['org_id'],profile['department_id'])
+                d.execute('INSERT INTO member_profiles VALUES(?,?,?,?)',(inv['org_id'],u['id'],profile['department_id'],profile['job_title']))
         elif old['state']!='active':fail(403,'账号已停用，请联系机构管理员恢复')
         d.execute('UPDATE invites SET used=1 WHERE id=?',(inv['id'],));log(d,inv['org_id'],u['id'],'member.accept',inv['id'])
     return {'org_id':inv['org_id']}

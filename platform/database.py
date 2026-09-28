@@ -51,6 +51,11 @@ def initialize():
         CREATE TABLE IF NOT EXISTS asset_grants(asset_id TEXT REFERENCES assets(id),inquiry_id TEXT REFERENCES inquiries(id),PRIMARY KEY(asset_id,inquiry_id));
         CREATE TABLE IF NOT EXISTS agent_runs(id TEXT PRIMARY KEY,org_id TEXT REFERENCES orgs(id),user_id TEXT REFERENCES users(id),request TEXT,result TEXT,mode TEXT,state TEXT,created INTEGER);
         CREATE TABLE IF NOT EXISTS audit(id TEXT PRIMARY KEY,org_id TEXT,user_id TEXT,action TEXT,target TEXT,detail TEXT,created INTEGER);
+        CREATE TABLE IF NOT EXISTS departments(id TEXT PRIMARY KEY,org_id TEXT NOT NULL REFERENCES orgs(id),parent_id TEXT REFERENCES departments(id),name TEXT NOT NULL,sort_order INTEGER NOT NULL DEFAULT 0,created INTEGER);
+        CREATE INDEX IF NOT EXISTS departments_org ON departments(org_id,parent_id);
+        CREATE TABLE IF NOT EXISTS member_profiles(org_id TEXT NOT NULL,user_id TEXT NOT NULL,department_id TEXT REFERENCES departments(id),job_title TEXT NOT NULL DEFAULT '',PRIMARY KEY(org_id,user_id),FOREIGN KEY(org_id,user_id) REFERENCES members(org_id,user_id));
+        CREATE TABLE IF NOT EXISTS invite_profiles(invite_id TEXT PRIMARY KEY REFERENCES invites(id),department_id TEXT REFERENCES departments(id),job_title TEXT NOT NULL DEFAULT '');
+        INSERT OR IGNORE INTO schema_version VALUES(2);
         ''')
 
 def log(d, org, user, action, target, detail=''):

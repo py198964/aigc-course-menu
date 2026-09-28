@@ -28,7 +28,7 @@ def identity(request: Request, required=True):
 def role(d, org, user, allowed=None):
     if not user: fail(401,'请先登录')
     r=d.execute('SELECT m.role FROM members m JOIN orgs o ON o.id=m.org_id WHERE m.org_id=? AND m.user_id=? AND m.state=\'active\' AND o.active=1',(org,user['id'])).fetchone()
-    if not r or (allowed and r['role'] not in allowed): fail(403,'没有此机构的操作权限')
+    if not r or r['role'] not in (ROLES if allowed is None else allowed): fail(403,'没有此机构的操作权限')
     return r['role']
 def is_member(d, org, user):
     if not user:return False
