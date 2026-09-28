@@ -18,4 +18,4 @@ if __name__=='__main__':
     if os.getenv('COURSE_PID_FILE'):
         Path(os.environ['COURSE_PID_FILE']).write_text(str(os.getpid()),encoding='ascii')
     import uvicorn
-    uvicorn.run('app:app',host=os.getenv('APP_HOST','127.0.0.1'),port=int(os.getenv('APP_PORT','8765')),workers=1,proxy_headers=False,access_log=False)
+    uvicorn.run('app:app',host=os.getenv('APP_HOST','127.0.0.1'),port=int(os.getenv('PORT') or os.getenv('APP_PORT','8765')),workers=1,proxy_headers=False,access_log=False)
