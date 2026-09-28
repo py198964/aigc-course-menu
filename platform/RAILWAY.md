@@ -4,7 +4,7 @@
 
 ## 服务配置
 
-从 GitHub 仓库部署时，Root Directory 设为 `/platform`，配置文件指定 `/platform/railway.json`。本目录的 Dockerfile 构建 Python 服务，`/api/health` 用作健康检查。
+从 GitHub 仓库部署时，Root Directory 设为 `/platform`。本目录的 Dockerfile 构建 Python 服务，在服务设置中将健康检查路径设为 `/api/health`、超时设为 120 秒，并启用空闲休眠节省试用额度。不要填写 Railway Config File；Railway 已弃用旧的 railway.json / railway.toml 配置入口。
 
 1. 添加持久卷，挂载 `/data`，再启动部署。
 2. 设置变量：
