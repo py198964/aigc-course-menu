@@ -36,7 +36,7 @@ function publicRecommend(req,cs){
 async function publicApi(path,method='GET',body){
   if(path==='/assets/config')return {max_upload_mb:512};
   if(path==='/auth/me')return {user:null,memberships:[]};
-  if(path==='/orgs')return [{id:'aigc-public',name:'AIGC视频创作学院',description:'公开课程目录与培训方案'}];
+  if(path==='/orgs')return [{id:'aigc-public',name:'微墨AIGC培训学院',description:'公开课程目录与培训方案'}];
   if(path==='/agent/config')return {ai_available:false,default_mode:'rules'};
   const cs=await publicCatalog();
   if(path.startsWith('/catalog?'))return cs;

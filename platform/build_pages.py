@@ -12,10 +12,10 @@ def build():
         if raw['visibility']!='public':continue
         c={k:v for k,v in raw.items() if k!='marketing_prompt'}
         version=hashlib.sha256(json.dumps(c,sort_keys=True,ensure_ascii=False).encode()).hexdigest()[:12]
-        c.update(id=c['code'],version=1,version_id=version,org_id='aigc-public',org_name='AIGC视频创作学院',author_name='课程教研团队')
+        c.update(id=c['code'],version=1,version_id=version,org_id='aigc-public',org_name='微墨AIGC培训学院',author_name='课程教研团队')
         courses.append(c)
     (PUBLIC/'catalog.json').write_text(json.dumps(courses,ensure_ascii=False,indent=2),encoding='utf-8')
-    for name in ['style.css','logo.svg','course-detail.js','organizations.js','presets.json','public-mode.js']:
+    for name in ['training-themes.json','style.css','logo.svg','course-detail.js','organizations.js','presets.json','public-mode.js']:
         (PUBLIC/name).write_bytes((ROOT/'web'/name).read_bytes())
     js=(ROOT/'web'/'app.js').read_text(encoding='utf-8')
     js=js.replace("async function api(path,method='GET',body){", "async function api(path,method='GET',body){if(window.COURSE_PUBLIC_MODE)return publicApi(path,method,body);")
@@ -25,6 +25,7 @@ def build():
     js=js.replace("action('保存方案','save-plan')", "action('导出保存','export-json')")
     js=js.replace("action('提交询价','inquire')", "action('询价与机构服务','login')")
     js=js.replace("case 'agent-form':if(!requireLogin())break;", "case 'agent-form':")
+    js=js.replace("fetch('/static/training-themes.json')", "fetch('public/training-themes.json')")
     js=js.replace("fetch('/static/presets.json')", "fetch('public/presets.json')")
     js=js.replace("当前提供规则组课，AI文案服务暂未启用。", "当前为公开站的浏览器规则组课，无需登录。")
     (PUBLIC/'app.js').write_text(js,encoding='utf-8')

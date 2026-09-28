@@ -14,7 +14,7 @@ from domain import ModuleData, visible_version, public_course, publish_check, va
 from organizations import router as organization_router, MembershipData, member_rows, set_membership, department_check
 
 initialize()
-app=FastAPI(title='机构课程平台',version='1.2.0',docs_url=None,redoc_url=None)
+app=FastAPI(title='机构课程平台',version='1.2.1',docs_url=None,redoc_url=None)
 app.include_router(organization_router)
 ORIGIN=os.getenv('APP_ORIGIN','http://127.0.0.1:8765').rstrip('/')
 SECURE=ORIGIN.startswith('https://')
@@ -62,7 +62,7 @@ def session(d,u,response):
 @app.get('/api/health')
 def health():
     with connect() as d:d.execute('SELECT 1')
-    return {'ok':True,'version':'1.2.0'}
+    return {'ok':True,'version':'1.2.1'}
 
 @app.post('/api/auth/register')
 def register(data:Credentials,request:Request,response:Response):

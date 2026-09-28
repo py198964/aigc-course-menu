@@ -187,3 +187,10 @@ Docker 对应 `docker compose exec course python manage.py reset-password --emai
 - 单文件默认512MB，服务器采用分段读取写入，不将完整录播载入内存；代理上传限制需高于应用限制（示例514MB）。
 
 首屏信息组织参考 [Coursera for Business](https://www.coursera.org/business) 与 [Udacity for Business](https://www.udacity.com/enterprise/overview)，以培训领域、能力目标、课程范围及行动入口为主；未使用第三方品牌、业绩或合作方背书。
+
+
+## 1.2.1 培训主题与机构
+
+顶部“培训主题”是课程体系入口，目前为“AIGC视频创作学院”。主题名称和稳定标识独立保存在 `web/training-themes.json`，不再读取机构名称。当前仅开放视频创作体系；后续上线“办公AI学院”时，需要同时加入该主题的课程归类、筛选及组课规则，不能只添加下拉选项。
+
+侧栏的“当前机构”（访客显示“课程提供机构”）仍负责机构切换。成员、部门、课程发布、询价与权限均按机构隔离；主题入口不授予机构权限。示例机构改为“微墨AIGC培训学院”。迁移只对初始化记录中名称仍为旧默认值的示例机构执行一次重命名，保留机构 ID、课程、账号、部门和业务记录，用户自行创建或改名的机构保持原样。

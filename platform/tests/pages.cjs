@@ -6,7 +6,7 @@ const server=live?null:spawn(path.join(root,'.venv/Scripts/python.exe'),['-m','h
 let browser;
 (async()=>{if(!live)for(let i=0;i<50;i++){try{if((await fetch(url)).ok)break}catch{}await new Promise(r=>setTimeout(r,100))}
 browser=await chromium.launch({channel:'msedge',headless:true});const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],failed=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)failed.push(r.url()+' '+r.status())});page.on('dialog',d=>d.accept());
-await page.goto(url+'#catalog');await page.locator('.course').first().waitFor();assert.equal(await page.locator('.course').count(),47);assert((await page.title()).includes('AI微课工坊'));
+await page.goto(url+'#catalog');await page.locator('.course').first().waitFor();assert.equal(await page.locator('.course').count(),47);assert.equal(await page.locator('.topbar #training-theme-select option:checked').textContent(),'AIGC视频创作学院');assert.equal(await page.locator('.sidebar #org-select option:checked').textContent(),'微墨AIGC培训学院');assert((await page.title()).includes('AI微课工坊'));
 await page.locator('[data-action=detail]').first().click();await page.getByRole('tab',{name:'课程资料',exact:true}).click();assert.equal(await page.locator('.resource-empty').count(),3);await page.locator('[data-action=close]').click();
 await page.locator('[data-action=cart]').first().click();await page.getByRole('link',{name:'生成课程方案',exact:true}).click();await page.locator('#plan-output .doc').waitFor();assert((await page.locator('#plan-output').textContent()).includes('学习目标'));
 const dlPromise=page.waitForEvent('download');await page.locator('[data-action=export-json]').first().click();assert((await dlPromise).suggestedFilename().endsWith('.json'));

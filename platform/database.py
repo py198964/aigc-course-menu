@@ -57,6 +57,12 @@ def initialize():
         CREATE TABLE IF NOT EXISTS invite_profiles(invite_id TEXT PRIMARY KEY REFERENCES invites(id),department_id TEXT REFERENCES departments(id),job_title TEXT NOT NULL DEFAULT '');
         INSERT OR IGNORE INTO schema_version VALUES(2);
         ''')
+    # Rename only the original bootstrap example, once; preserve custom institutions.
+    with connect(True) as d:
+        if not d.execute('SELECT 1 FROM schema_version WHERE version=3').fetchone():
+            d.execute("UPDATE orgs SET name=? WHERE name=? AND id IN (SELECT target FROM audit WHERE action='system.bootstrap')",
+                      ('微墨AIGC培训学院','AIGC视频创作学院'))
+            d.execute('INSERT INTO schema_version VALUES(3)')
 
 def log(d, org, user, action, target, detail=''):
     d.execute('INSERT INTO audit VALUES(?,?,?,?,?,?,?)',(uid(),org,user,action,target,dump(detail),now()))

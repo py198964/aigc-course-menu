@@ -9,7 +9,7 @@ from database import ROOT, DATA, DB, initialize, connect, uid, now, dump, log
 from security import password_hash
 from domain import ModuleData
 
-def bootstrap(admin_email='owner@local.test',org_name='AIGC视频创作学院'):
+def bootstrap(admin_email='owner@local.test',org_name='微墨AIGC培训学院'):
     initialize()
     with connect(True) as d:
         if d.execute('SELECT 1 FROM users LIMIT 1').fetchone():
@@ -46,7 +46,7 @@ def backup():
     return {'backup_file':str(archive),'note':'备份包含个人资料和授权资源，请限制访问。'}
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('command',choices=['init','backup','reset-password']);parser.add_argument('--email',default='owner@local.test');parser.add_argument('--org',default='AIGC视频创作学院');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('command',choices=['init','backup','reset-password']);parser.add_argument('--email',default='owner@local.test');parser.add_argument('--org',default='微墨AIGC培训学院');args=parser.parse_args()
     if args.command=='init':result=bootstrap(args.email,args.org)
     elif args.command=='backup':result=backup()
     else:
