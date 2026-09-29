@@ -4,17 +4,18 @@ from datetime import date
 from typing import Literal
 from urllib.parse import urlparse
 import httpx
-from fastapi import FastAPI, Request, Response, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, Request, Response, HTTPException, UploadFile, File, Form, BackgroundTasks
 from fastapi.responses import FileResponse, PlainTextResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, ValidationError
 from database import ROOT, DATA, initialize, connect, uid, now, dump, parse, log
 from security import identity, role, is_member, safe_user, password_hash, password_ok, digest, throttle, fail, COOKIE, ROLES
 from domain import ModuleData, visible_version, public_course, publish_check, validate_plan, recommend, lesson_markdown
+import ai_studio
 from organizations import router as organization_router, MembershipData, member_rows, set_membership, department_check
 
 initialize()
-app=FastAPI(title='机构课程平台',version='1.2.1',docs_url=None,redoc_url=None)
+app=FastAPI(title='机构课程平台',version='1.3.0',docs_url=None,redoc_url=None)
 app.include_router(organization_router)
 ORIGIN=os.getenv('APP_ORIGIN','http://127.0.0.1:8765').rstrip('/')
 SECURE=ORIGIN.startswith('https://')
@@ -62,7 +63,7 @@ def session(d,u,response):
 @app.get('/api/health')
 def health():
     with connect() as d:d.execute('SELECT 1')
-    return {'ok':True,'version':'1.2.1'}
+    return {'ok':True,'version':'1.3.0'}
 
 @app.post('/api/auth/register')
 def register(data:Credentials,request:Request,response:Response):
@@ -394,6 +395,9 @@ class PlanInput(BaseModel):
     notes:str=Field(default='',max_length=3000)
     introduction:str=Field(default='',max_length=4000)
     promotion:str=Field(default='',max_length=4000)
+    subtitle:str=Field(default='',max_length=100)
+    objectives:list[ai_studio.ShortText]=Field(default_factory=list,max_length=8)
+    highlights:list[ai_studio.ShortText]=Field(default_factory=list,max_length=6)
     daily_minutes:int=Field(default=360,ge=60,le=480,strict=True)
     days:int=Field(default=0,ge=0,le=30,strict=True)
     people:int=Field(default=20,ge=1,le=10000,strict=True)
@@ -405,8 +409,56 @@ class PlanInput(BaseModel):
 def get_plan(d,body,u):
     p=validate_plan(d,body.org_id,body.ids,u,body.daily_minutes,body.days,body.people,body.budget_fen,body.equivalent,body.batches,body.expected_versions)
     p.update(title=body.title or body.audience+'·AIGC视频创作（'+format(p['total_minutes']/60,'g')+'小时）',audience=body.audience,notes=body.notes,org_id=body.org_id)
-    p.update(introduction=body.introduction,promotion=body.promotion)
+    p.update(introduction=body.introduction,promotion=body.promotion,subtitle=body.subtitle,objectives=body.objectives,highlights=body.highlights)
     return p
+class CreativeInput(BaseModel):
+    plan:PlanInput
+    kind:Literal['copy','image']='copy'
+    style:Literal['academy','business','creative']='academy'
+    request_key:str=Field(min_length=8,max_length=100)
+
+@app.get('/api/creative/config')
+def creative_config():return ai_studio.configuration()
+
+@app.post('/api/creative/jobs')
+def creative_create(body:CreativeInput,request:Request,tasks:BackgroundTasks):
+    u=identity(request)
+    with connect(True) as d:
+        p=get_plan(d,body.plan,u)
+        if not p['ids']:fail(422,'请先选择课程')
+        if len(dump(p).encode('utf-8'))>600000:fail(422,'课程组合内容过大，请减少模块后生成')
+        job,created=ai_studio.create_job(d,p,u,body.kind,body.request_key,body.style)
+    if created:tasks.add_task(ai_studio.execute_job,job['id'])
+    return job
+
+@app.get('/api/creative/jobs')
+def creative_list(org:str,request:Request):
+    u=identity(request)
+    with connect(True) as d:
+        ids=d.execute('SELECT id FROM creative_jobs WHERE user_id=? AND org_id=? ORDER BY created DESC LIMIT 30',(u['id'],org)).fetchall()
+        jobs=[]
+        for row in ids:
+            try:jobs.append(ai_studio.public_job(ai_studio.authorized_job(d,row['id'],u)))
+            except HTTPException as exc:
+                if exc.status_code!=404:raise
+        return jobs
+
+@app.get('/api/creative/jobs/{ident}')
+def creative_get(ident:str,request:Request):
+    u=identity(request)
+    with connect(True) as d:return ai_studio.public_job(ai_studio.authorized_job(d,ident,u))
+
+@app.get('/api/creative/jobs/{ident}/image')
+def creative_image(ident:str,request:Request):
+    u=identity(request)
+    with connect(True) as d:
+        row=ai_studio.authorized_job(d,ident,u)
+        if row['state']!='complete' or row['kind']!='image':fail(404,'图片尚未生成')
+        name=parse(row['result']).get('file','')
+    path=DATA/'files'/name
+    if not name or path.name!=name or not path.is_file():fail(404,'图片不存在')
+    return FileResponse(path,media_type={'.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp'}[path.suffix])
+
 @app.post('/api/plans/validate')
 def check_plan(body:PlanInput,request:Request):
     u=identity(request,False)
@@ -552,7 +604,7 @@ class AgentInput(BaseModel):
     equivalent:bool=False
     mode:Literal['rules','ai']='rules'
 @app.get('/api/agent/config')
-def agent_config():return {'ai_available':bool(os.getenv('AI_API_KEY') and os.getenv('AI_BASE_URL') and os.getenv('AI_MODEL')),'default_mode':'rules','model':os.getenv('AI_MODEL',''),'note':'默认使用规则组课；AI只在选择真实AI模式时调用。'}
+def agent_config():return {'ai_available':bool(ai_studio.api_key()) or bool(os.getenv('AI_API_KEY') and os.getenv('AI_BASE_URL') and os.getenv('AI_MODEL')),'default_mode':'rules','model':os.getenv('AI_MODEL',''),'note':'默认使用规则组课；AI只在选择真实AI模式时调用。'}
 @app.post('/api/agent/plan')
 def agent_plan(body:AgentInput,request:Request):
     u=identity(request);runid=uid();req=body.model_dump()
@@ -563,7 +615,12 @@ def agent_plan(body:AgentInput,request:Request):
         if count>=org['agent_daily_limit']:fail(429,'已达到该机构对当前账号的每日组课次数上限')
         d.execute('INSERT INTO agent_runs VALUES(?,?,?,?,?,?,?,?)',(runid,body.org_id,u['id'],dump(req),'{}',body.mode,'running',now()))
         result=recommend(d,body.org_id,u,req)
-    if body.mode=='ai':
+    if body.mode=='ai' and ai_studio.api_key():
+        try:
+            result.update(ai_studio.generate_copy(result)['copy']);result['mode']='ai-assisted'
+        except Exception:
+            result['mode']='rules-fallback';result['limitations'].append('硅基流动文案调用未成功，已保留规则方案。')
+    elif body.mode=='ai':
         base=os.getenv('AI_BASE_URL','').rstrip('/');key=os.getenv('AI_API_KEY');model=os.getenv('AI_MODEL')
         if not(base and key and model):
             with connect(True) as d:d.execute("UPDATE agent_runs SET state='failed' WHERE id=?",(runid,))

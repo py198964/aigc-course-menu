@@ -56,6 +56,9 @@ def initialize():
         CREATE TABLE IF NOT EXISTS member_profiles(org_id TEXT NOT NULL,user_id TEXT NOT NULL,department_id TEXT REFERENCES departments(id),job_title TEXT NOT NULL DEFAULT '',PRIMARY KEY(org_id,user_id),FOREIGN KEY(org_id,user_id) REFERENCES members(org_id,user_id));
         CREATE TABLE IF NOT EXISTS invite_profiles(invite_id TEXT PRIMARY KEY REFERENCES invites(id),department_id TEXT REFERENCES departments(id),job_title TEXT NOT NULL DEFAULT '');
         INSERT OR IGNORE INTO schema_version VALUES(2);
+        CREATE TABLE IF NOT EXISTS creative_jobs(id TEXT PRIMARY KEY,org_id TEXT NOT NULL REFERENCES orgs(id),user_id TEXT NOT NULL REFERENCES users(id),kind TEXT NOT NULL,state TEXT NOT NULL,input TEXT NOT NULL,result TEXT NOT NULL DEFAULT '{}',error TEXT NOT NULL DEFAULT '',created INTEGER,updated INTEGER,request_key TEXT NOT NULL,UNIQUE(user_id,request_key));
+        CREATE INDEX IF NOT EXISTS creative_jobs_owner ON creative_jobs(user_id,org_id,created);
+        INSERT OR IGNORE INTO schema_version VALUES(4);
         ''')
     # Rename only the original bootstrap example, once; preserve custom institutions.
     with connect(True) as d:

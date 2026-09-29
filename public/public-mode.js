@@ -20,7 +20,7 @@ function publicPlan(body,cs){
   for(const c of courses){if(current.length&&minutes+c.minutes>daily){schedule.push({minutes,courses:current});current=[];minutes=0}current.push(c.id);minutes+=c.minutes}if(current.length)schedule.push({minutes,courses:current});
   const total=courses.reduce((n,c)=>n+c.minutes,0),price=courses.reduce((n,c)=>n+c.price_fen,0)*batches;
   if(days&&schedule.length>days)warnings.push('完整模块排课超过目标天数');if(days&&total<days*daily)warnings.push(`距离目标净课时尚余${days*daily-total}分钟，可安排加练或补充模块`);if(body.budget_fen!=null&&price>body.budget_fen)warnings.push('模块参考小计超过预算');
-  return {org_id:'aigc-public',ids,courses,versions:Object.fromEntries(courses.map(c=>[c.id,c.version_id])),title:body.title||`${body.audience||'社会学员'}·AIGC视频创作（${total/60}小时）`,audience:body.audience||'社会学员',notes:body.notes||'',introduction:body.introduction||'',promotion:body.promotion||'',total_minutes:total,subtotal_fen:price,schedule,warnings,daily_minutes:daily,days,people,batches,budget_fen:body.budget_fen??null,equivalent:!!body.equivalent,price_note:'模块参考小计；未明确的实施、差旅、场地及工具费用另行询价。'};
+  return {org_id:'aigc-public',ids,courses,versions:Object.fromEntries(courses.map(c=>[c.id,c.version_id])),title:body.title||`${body.audience||'社会学员'}·AIGC视频创作（${total/60}小时）`,audience:body.audience||'社会学员',notes:body.notes||'',introduction:body.introduction||'',promotion:body.promotion||'',subtitle:body.subtitle||'',objectives:body.objectives||[],highlights:body.highlights||[],total_minutes:total,subtotal_fen:price,schedule,warnings,daily_minutes:daily,days,people,batches,budget_fen:body.budget_fen??null,equivalent:!!body.equivalent,price_note:'模块参考小计；未明确的实施、差旅、场地及工具费用另行询价。'};
 }
 function publicRecommend(req,cs){
   const themes={'口播':['口播','数字人','配音'],'转绘':['转绘','Redraw','尾帧'],'短剧':['短剧','剧情','分镜','角色'],'教学':['教学','微课','讲解'],'广告':['广告','产品','电商','卖点'],'综合':['视频','基础','交付']};
@@ -34,6 +34,7 @@ function publicRecommend(req,cs){
   return {...publicPlan({...req,ids:selected,title:req.audience+'·'+req.theme+'视频创作课程'},cs),mode:'rules',reasons,limitations:[...limitations,'公开站在浏览器内完成规则组课；实际项目费用与授课安排由机构确认。']};
 }
 async function publicApi(path,method='GET',body){
+  if(path==='/creative/config')return {available:false};
   if(path==='/assets/config')return {max_upload_mb:512};
   if(path==='/auth/me')return {user:null,memberships:[]};
   if(path==='/orgs')return [{id:'aigc-public',name:'微墨AIGC培训学院',description:'公开课程目录与培训方案'}];

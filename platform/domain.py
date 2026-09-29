@@ -146,6 +146,9 @@ def recommend(d,org,user,req):
 
 def lesson_markdown(plan):
     cs={c['id']:c for c in plan['courses']};lines=['# '+plan.get('title','课程方案'),'','对象：'+plan.get('audience','社会学员'),f"净课时：{plan['total_minutes']}分钟；模块参考小计：¥{plan['subtotal_fen']/100:.2f}",plan['price_note'],'','## 课程简介',plan.get('introduction') or ('围绕'+plan.get('title','视频创作')+'，通过'+str(len(cs))+'个模块完成方法学习、案例练习和成果检查。'),'','## 组课条件']
+    if plan.get('subtitle'):lines+=['',plan['subtitle']]
+    if plan.get('objectives'):lines+=['','## 培训目标']+['- '+x for x in plan['objectives']]
+    if plan.get('highlights'):lines+=['','## 课程亮点']+['- '+x for x in plan['highlights']]
     lines+=['- '+x for x in plan['warnings']]
     if plan.get('notes'):lines+=['','需求重点：'+plan['notes']]
     for i,day in enumerate(plan['schedule'],1):
