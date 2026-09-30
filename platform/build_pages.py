@@ -15,7 +15,7 @@ def build():
         c.update(id=c['code'],version=1,version_id=version,org_id='aigc-public',org_name='微墨AIGC培训学院',author_name='课程教研团队')
         courses.append(c)
     (PUBLIC/'catalog.json').write_text(json.dumps(courses,ensure_ascii=False,indent=2),encoding='utf-8')
-    for name in ['studio.js','training-themes.json','style.css','logo.svg','course-detail.js','organizations.js','presets.json','public-mode.js']:
+    for name in ['assistant.js','studio.js','training-themes.json','style.css','logo.svg','course-detail.js','organizations.js','presets.json','public-mode.js']:
         (PUBLIC/name).write_bytes((ROOT/'web'/name).read_bytes())
     js=(ROOT/'web'/'app.js').read_text(encoding='utf-8')
     js=js.replace("async function api(path,method='GET',body){", "async function api(path,method='GET',body){if(window.COURSE_PUBLIC_MODE)return publicApi(path,method,body);")

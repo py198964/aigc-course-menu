@@ -9,6 +9,10 @@ COPY={'title':'产品短视频创作实训','subtitle':'从策划到作品交付
       'objectives':['能够说明视频制作流程','能够完成产品短片练习'],
       'highlights':['案例贯穿教学','以作品检验学习成果'],'promotion':'面向企业运营人员，以实际作品为线索开展产品短视频实训。'}
 def provider(path,payload):
+    if path=='/chat/completions' and 'ranked_codes' in payload['messages'][0]['content']:
+        turns=json.loads(payload['messages'][1]['content'])['conversation']
+        data={'summary':'企业新媒体团队视频制作实训','in_scope':True,'audience':'企业新媒体团队','changed_fields':['days'],'days':1 if len(turns)>1 else 2,'daily_minutes':360,'ranked_codes':['P02','P03','F12','F01'],'reasons':{'P02':'围绕企业产品制作短视频广告','P03':'学习产品演示与卖点表达'},'questions':[]}
+        return {'choices':[{'message':{'content':json.dumps(data)}}]}
     if path=='/chat/completions':return {'choices':[{'message':{'content':json.dumps(COPY)}}]}
     return {'images':[{'url':'https://files.siliconflow.cn/fixture.png'}]}
 ai_studio.provider_post=provider

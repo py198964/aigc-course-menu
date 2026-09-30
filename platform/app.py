@@ -12,10 +12,11 @@ from database import ROOT, DATA, initialize, connect, uid, now, dump, parse, log
 from security import identity, role, is_member, safe_user, password_hash, password_ok, digest, throttle, fail, COOKIE, ROLES
 from domain import ModuleData, visible_version, public_course, publish_check, validate_plan, recommend, lesson_markdown
 import ai_studio
+import course_assistant
 from organizations import router as organization_router, MembershipData, member_rows, set_membership, department_check
 
 initialize()
-app=FastAPI(title='机构课程平台',version='1.3.0',docs_url=None,redoc_url=None)
+app=FastAPI(title='机构课程平台',version='1.4.0',docs_url=None,redoc_url=None)
 app.include_router(organization_router)
 ORIGIN=os.getenv('APP_ORIGIN','http://127.0.0.1:8765').rstrip('/')
 SECURE=ORIGIN.startswith('https://')
@@ -63,7 +64,7 @@ def session(d,u,response):
 @app.get('/api/health')
 def health():
     with connect() as d:d.execute('SELECT 1')
-    return {'ok':True,'version':'1.3.0'}
+    return {'ok':True,'version':'1.4.0'}
 
 @app.post('/api/auth/register')
 def register(data:Credentials,request:Request,response:Response):
@@ -604,7 +605,61 @@ class AgentInput(BaseModel):
     equivalent:bool=False
     mode:Literal['rules','ai']='rules'
 @app.get('/api/agent/config')
-def agent_config():return {'ai_available':bool(ai_studio.api_key()) or bool(os.getenv('AI_API_KEY') and os.getenv('AI_BASE_URL') and os.getenv('AI_MODEL')),'default_mode':'rules','model':os.getenv('AI_MODEL',''),'note':'默认使用规则组课；AI只在选择真实AI模式时调用。'}
+def agent_config():return {'ai_available':bool(ai_studio.api_key()) or bool(os.getenv('AI_API_KEY') and os.getenv('AI_BASE_URL') and os.getenv('AI_MODEL')),'assistant_available':bool(ai_studio.api_key()),'default_mode':'rules','model':os.getenv('AI_MODEL',''),'note':'默认使用规则组课；AI只在选择真实AI模式时调用。'}
+class AssistantInput(BaseModel):
+    org_id:str
+    message:str=Field(min_length=2,max_length=2000)
+    previous_id:str|None=None
+
+def assistant_previous(d,ident,u,org=None):
+    old=d.execute("SELECT * FROM agent_runs WHERE id=? AND user_id=? AND mode='assistant' AND state='complete'",(ident,u['id'])).fetchone()
+    if not old or (org and old['org_id']!=org):fail(404,'对话不存在')
+    if not d.execute('SELECT 1 FROM orgs WHERE id=? AND active=1',(old['org_id'],)).fetchone():fail(404,'机构不可用')
+    result=parse(old['result'])
+    for mid in result['plan']['ids']:visible_version(d,mid,u)
+    return old,result
+
+@app.get('/api/agent/assistant/{ident}')
+def assistant_read(ident:str,request:Request):
+    u=identity(request)
+    with connect() as d:
+        old,result=assistant_previous(d,ident,u)
+        return {'id':ident,**result,'messages':parse(old['request'])['messages']}
+
+@app.post('/api/agent/assistant')
+def assistant_plan(body:AssistantInput,request:Request):
+    u=identity(request)
+    if not ai_studio.api_key():fail(409,'AI助手暂未配置，可使用按条件组课。')
+    message=body.message.strip()
+    if len(message)<2:fail(422,'请描述培训需求')
+    messages=[];previous=None;runid=uid()
+    with connect(True) as d:
+        org=d.execute('SELECT * FROM orgs WHERE id=? AND active=1',(body.org_id,)).fetchone()
+        if not org:fail(404,'机构不存在')
+        if body.previous_id:
+            old,previous_result=assistant_previous(d,body.previous_id,u,body.org_id)
+            previous=previous_result['requirements']
+            messages=parse(old['request'])['messages']
+        if len(messages)>=8:fail(422,'本轮已累计8次需求描述，请新建对话以便准确组课。')
+        count=d.execute('SELECT COUNT(*) FROM agent_runs WHERE org_id=? AND user_id=? AND created>?',(body.org_id,u['id'],now()-86400)).fetchone()[0]
+        if count>=org['agent_daily_limit']:fail(429,'已达到今日组课次数上限。')
+        pool=course_assistant.catalog(d,body.org_id,u)
+        if not pool:fail(409,'当前机构暂无可推荐的已发布课程。')
+        if len(pool)>200:fail(409,'当前目录较大，请联系管理员划分课程体系后使用助手。')
+        messages=messages+[message]
+        d.execute('INSERT INTO agent_runs VALUES(?,?,?,?,?,?,?,?)',(runid,body.org_id,u['id'],dump({'messages':messages}),'{}','assistant','running',now()))
+    try:
+        req=course_assistant.interpret(messages,pool,previous)
+        with connect() as d:
+            if not d.execute('SELECT 1 FROM orgs WHERE id=? AND active=1',(body.org_id,)).fetchone():fail(404,'机构不可用')
+            result=course_assistant.assemble(d,body.org_id,u,req,course_assistant.catalog(d,body.org_id,u))
+        with connect(True) as d:d.execute("UPDATE agent_runs SET state='complete',result=? WHERE id=?",(dump(result),runid))
+        return {'id':runid,**result,'messages':messages}
+    except Exception as exc:
+        with connect(True) as d:d.execute("UPDATE agent_runs SET state='failed' WHERE id=?",(runid,))
+        if isinstance(exc,HTTPException):raise
+        fail(502,str(exc) if isinstance(exc,ai_studio.ProviderError) else 'AI助手暂时未能完成推荐，请重试或使用按条件组课。')
+
 @app.post('/api/agent/plan')
 def agent_plan(body:AgentInput,request:Request):
     u=identity(request);runid=uid();req=body.model_dump()
